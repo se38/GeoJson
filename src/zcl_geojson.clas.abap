@@ -4,13 +4,20 @@ CLASS zcl_geojson DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
+    TYPES: ty_coordinate_value TYPE p LENGTH 16 DECIMALS 13.
+
     METHODS constructor.
-    METHODS get_feature_obj
-      RETURNING VALUE(r_result) TYPE REF TO zcl_geojson_feature.
-    METHODS add_feature
-      IMPORTING i_feature TYPE REF TO data.
     METHODS get_json
       RETURNING VALUE(r_result) TYPE string.
+    METHODS get_new_point
+      IMPORTING i_latitude      TYPE ty_coordinate_value OPTIONAL
+                i_longitude     TYPE ty_coordinate_value OPTIONAL
+      RETURNING VALUE(r_result) TYPE REF TO zcl_geojson_point.
+    METHODS get_new_linestring
+      RETURNING VALUE(r_result) TYPE REF TO zcl_geojson_linestring.
+
+    METHODS add_feature
+      IMPORTING i_feature TYPE REF TO zif_geojson_feature.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -24,13 +31,17 @@ ENDCLASS.
 
 
 CLASS zcl_geojson IMPLEMENTATION.
+
+
   METHOD add_feature.
-    INSERT i_feature INTO TABLE _featurecollection-features.
+    INSERT i_feature->get_feature( ) INTO TABLE _featurecollection-features.
   ENDMETHOD.
+
 
   METHOD constructor.
     _featurecollection-type = 'FeatureCollection'.
   ENDMETHOD.
+
 
   METHOD get_json.
     r_result = zcl_json_document=>create_with_data(
@@ -39,8 +50,17 @@ CLASS zcl_geojson IMPLEMENTATION.
       )->get_json( ).
   ENDMETHOD.
 
-  METHOD get_feature_obj.
-    r_result = NEW zcl_geojson_feature( ).
+
+  METHOD get_new_point.
+
+    r_result = NEW zcl_geojson_point(
+        i_latitude  = i_latitude
+        i_longitude = i_longitude
+    ).
+
   ENDMETHOD.
 
+  METHOD get_new_linestring.
+    r_result = NEW zcl_geojson_linestring( ).
+  ENDMETHOD.
 ENDCLASS.
