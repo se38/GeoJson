@@ -1,4 +1,4 @@
-CLASS zcl_geojson_linestring DEFINITION
+CLASS zcl_geojson_polygon DEFINITION
   PUBLIC
   FINAL
   CREATE PRIVATE
@@ -18,8 +18,10 @@ CLASS zcl_geojson_linestring DEFINITION
     METHODS set_properties
       IMPORTING i_stroke         TYPE string OPTIONAL
                 i_stroke_width   TYPE ty_width OPTIONAL
-                i_stroke_opacity TYPE ty_opacity OPTIONAL.
-
+                i_stroke_opacity TYPE ty_opacity OPTIONAL
+                i_fill           TYPE string OPTIONAL
+                i_fill_opacity   TYPE ty_opacity OPTIONAL.
+    METHODS finalize.
 
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -28,13 +30,16 @@ CLASS zcl_geojson_linestring DEFINITION
              stroke         TYPE string,
              stroke_width   TYPE p LENGTH 4 DECIMALS 1,
              stroke_opacity TYPE p LENGTH 2 DECIMALS 1,
+             fill           TYPE string,
+             fill_opacity   TYPE p LENGTH 2 DECIMALS 1,
            END OF ty_properties.
 
     DATA: _coordinate_pair TYPE STANDARD TABLE OF zcl_geojson=>ty_coordinate_value.
+    DATA: _coordinate_pairs LIKE STANDARD TABLE OF _coordinate_pair.
 
     DATA: BEGIN OF _geometry,
             type        TYPE string,
-            coordinates LIKE STANDARD TABLE OF _coordinate_pair,
+            coordinates LIKE STANDARD TABLE OF _coordinate_pairs,
           END OF _geometry.
 
     DATA: BEGIN OF _linestring,
@@ -47,7 +52,7 @@ ENDCLASS.
 
 
 
-CLASS zcl_geojson_linestring IMPLEMENTATION.
+CLASS zcl_geojson_polygon IMPLEMENTATION.
   METHOD constructor.
 
     _linestring-type = 'Feature'.
@@ -55,16 +60,21 @@ CLASS zcl_geojson_linestring IMPLEMENTATION.
     _linestring-properties-stroke = '#555555'.
     _linestring-properties-stroke_width = 2.
     _linestring-properties-stroke_opacity = 1.
+    _linestring-properties-fill = '#555555'.
+    _linestring-properties-fill_opacity = '0.5'.
 
-    _linestring-geometry-type = 'LineString'.
+    _linestring-geometry-type = 'Polygon'.
   ENDMETHOD.
 
   METHOD add_coordinate.
+
     _coordinate_pair = VALUE #(
       ( i_latitude )
       ( i_longitude )
     ).
-    INSERT _coordinate_pair INTO TABLE _linestring-geometry-coordinates.
+
+    INSERT _coordinate_pair INTO TABLE _coordinate_pairs.
+
   ENDMETHOD.
 
   METHOD zif_geojson_feature~get_feature.
@@ -85,6 +95,19 @@ CLASS zcl_geojson_linestring IMPLEMENTATION.
       _linestring-properties-stroke_opacity = i_stroke_opacity.
     ENDIF.
 
+    IF i_fill IS SUPPLIED.
+      _linestring-properties-fill = i_fill.
+    ENDIF.
+
+    IF i_fill_opacity IS SUPPLIED.
+      _linestring-properties-fill_opacity = i_fill_opacity.
+    ENDIF.
+
+  ENDMETHOD.
+
+  METHOD finalize.
+    INSERT _coordinate_pairs INTO TABLE _linestring-geometry-coordinates.
+    CLEAR _coordinate_pairs.
   ENDMETHOD.
 
 ENDCLASS.

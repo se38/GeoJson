@@ -15,6 +15,8 @@ CLASS zcl_geojson DEFINITION
       RETURNING VALUE(r_result) TYPE REF TO zcl_geojson_point.
     METHODS get_new_linestring
       RETURNING VALUE(r_result) TYPE REF TO zcl_geojson_linestring.
+    METHODS get_new_polygon
+      RETURNING VALUE(r_result) TYPE REF TO zcl_geojson_polygon.
 
     METHODS add_feature
       IMPORTING i_feature TYPE REF TO zif_geojson_feature.
@@ -63,4 +65,9 @@ CLASS zcl_geojson IMPLEMENTATION.
   METHOD get_new_linestring.
     r_result = NEW zcl_geojson_linestring( ).
   ENDMETHOD.
+
+  METHOD get_new_polygon.
+    r_result = NEW zcl_geojson_polygon( ).
+  ENDMETHOD.
+
 ENDCLASS.
