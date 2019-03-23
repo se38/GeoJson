@@ -6,9 +6,10 @@ Import Source with [abapGit](https://github.com/larshp/abapGit)
 
 ## Required Packages
 Needs [JSON Document Class](https://github.com/se38/zjson) with at least version 2.32
-
+```
+write:/ zcl_json_document=>get_version( ).
+```
 ## Usage
-
 This example will create a simple point object:
 ```
     DATA(geojson) = NEW zcl_geojson( ).
