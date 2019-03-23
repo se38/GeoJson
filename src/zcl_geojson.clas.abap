@@ -7,21 +7,24 @@ CLASS zcl_geojson DEFINITION
     TYPES: ty_coordinate_value TYPE p LENGTH 16 DECIMALS 13.
 
     METHODS constructor.
+
     METHODS get_json
       RETURNING VALUE(r_result) TYPE string.
+
     METHODS get_new_point
       IMPORTING i_latitude      TYPE ty_coordinate_value OPTIONAL
                 i_longitude     TYPE ty_coordinate_value OPTIONAL
       RETURNING VALUE(r_result) TYPE REF TO zcl_geojson_point.
+
     METHODS get_new_linestring
       RETURNING VALUE(r_result) TYPE REF TO zcl_geojson_linestring.
+
     METHODS get_new_polygon
       RETURNING VALUE(r_result) TYPE REF TO zcl_geojson_polygon.
 
     METHODS add_feature
       IMPORTING i_feature TYPE REF TO zif_geojson_feature.
 
-  PROTECTED SECTION.
   PRIVATE SECTION.
     DATA: BEGIN OF _featurecollection,
             type     TYPE string,

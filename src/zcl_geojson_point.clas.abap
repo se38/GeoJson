@@ -10,6 +10,7 @@ CLASS zcl_geojson_point DEFINITION
     METHODS constructor
       IMPORTING i_latitude  TYPE zcl_geojson=>ty_coordinate_value OPTIONAL
                 i_longitude TYPE zcl_geojson=>ty_coordinate_value OPTIONAL.
+
     METHODS set_coordinate
       IMPORTING i_latitude  TYPE zcl_geojson=>ty_coordinate_value
                 i_longitude TYPE zcl_geojson=>ty_coordinate_value.
@@ -19,14 +20,16 @@ CLASS zcl_geojson_point DEFINITION
                 i_marker_size   TYPE string OPTIONAL
                 i_marker_symbol TYPE string OPTIONAL.
 
-  PROTECTED SECTION.
+    METHODS set_custom_properties
+      IMPORTING i_properties TYPE REF TO data.
+
   PRIVATE SECTION.
 
-    TYPES: BEGIN OF ty_properties,
-             marker_color  TYPE string,
-             marker_size   TYPE string,
-             marker_symbol TYPE string,
-           END OF ty_properties.
+    DATA: BEGIN OF _geojson_io_properties,     "properties used by geojson.io
+            marker_color  TYPE string,
+            marker_size   TYPE string,
+            marker_symbol TYPE string,
+          END OF _geojson_io_properties.
 
     DATA: BEGIN OF _geometry,
             type        TYPE string,
@@ -35,7 +38,7 @@ CLASS zcl_geojson_point DEFINITION
 
     DATA: BEGIN OF _point,
             type       TYPE string,
-            properties TYPE ty_properties,
+            properties TYPE REF TO data,
             geometry   LIKE _geometry,
           END OF _point.
 
@@ -49,9 +52,11 @@ CLASS zcl_geojson_point IMPLEMENTATION.
   METHOD constructor.
     _point-type = 'Feature'.
 
-    _point-properties-marker_color = '#7e7e7e'.
-    _point-properties-marker_size = 'medium'.
-    _point-properties-marker_symbol = ''.
+    _geojson_io_properties-marker_color = '#7e7e7e'.
+    _geojson_io_properties-marker_size = 'medium'.
+    _geojson_io_properties-marker_symbol = ''.
+
+    _point-properties = REF #( _geojson_io_properties ).
 
     _point-geometry-type = 'Point'.
 
@@ -67,8 +72,8 @@ CLASS zcl_geojson_point IMPLEMENTATION.
 
   METHOD set_coordinate.
     _point-geometry-coordinates = VALUE #(
-      ( i_latitude )
       ( i_longitude )
+      ( i_latitude )
     ).
   ENDMETHOD.
 
@@ -79,17 +84,21 @@ CLASS zcl_geojson_point IMPLEMENTATION.
   METHOD set_properties.
 
     IF i_marker_color IS SUPPLIED.
-      _point-properties-marker_color = i_marker_color.
+      _geojson_io_properties-marker_color = i_marker_color.
     ENDIF.
 
     IF i_marker_size IS SUPPLIED.
-      _point-properties-marker_size = i_marker_size.
+      _geojson_io_properties-marker_size = i_marker_size.
     ENDIF.
 
     IF i_marker_symbol IS SUPPLIED.
-      _point-properties-marker_symbol = i_marker_symbol.
+      _geojson_io_properties-marker_symbol = i_marker_symbol.
     ENDIF.
 
+  ENDMETHOD.
+
+  METHOD set_custom_properties.
+    _point-properties = i_properties.
   ENDMETHOD.
 
 ENDCLASS.
