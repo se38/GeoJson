@@ -39,7 +39,10 @@ CLASS zcl_geojson IMPLEMENTATION.
 
 
   METHOD add_feature.
+
+    CHECK i_feature IS BOUND.
     INSERT i_feature->get_feature( ) INTO TABLE _featurecollection-features.
+
   ENDMETHOD.
 
 
