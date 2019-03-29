@@ -6,8 +6,16 @@ CLASS zcl_geojson_leafletjs DEFINITION
   PUBLIC SECTION.
     METHODS get_html
       IMPORTING i_json          TYPE string
+                i_width_x_in_px TYPE i DEFAULT 800
+                i_width_y_in_px TYPE i DEFAULT 500
       RETURNING VALUE(r_result) TYPE string.
-
+    METHODS get_html_head
+      RETURNING VALUE(r_result) TYPE string.
+    METHODS get_html_body
+      IMPORTING i_json          TYPE string
+                i_width_x_in_px TYPE i DEFAULT 800
+                i_width_y_in_px TYPE i DEFAULT 500
+      RETURNING VALUE(r_result) TYPE string.
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -20,6 +28,19 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
     r_result =
 `<html>` &&
 `<head>` &&
+|{ get_html_head( ) }| &&
+`</head>` &&
+`` &&
+`<body>` &&
+|{ get_html_body( i_json = i_json i_width_x_in_px = i_width_x_in_px i_width_y_in_px = i_width_y_in_px ) }| &&
+`</body>   ` &&
+`</html>`.
+
+  ENDMETHOD.
+
+  METHOD get_html_head.
+
+    r_result =
 ` <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"` &&
 `   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="` &&
 `   crossorigin=""/>` &&
@@ -27,11 +48,14 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 ` <!-- Make sure you put this AFTER Leaflet's CSS -->` &&
 ` <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"` &&
 `   integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="` &&
-`   crossorigin=""></script>   ` &&
-`</head>` &&
-`` &&
-`<body>` &&
-`<div id="mapid" style="width: 800px; height: 500px;"></div>` &&
+`   crossorigin=""></script>   `.
+
+  ENDMETHOD.
+
+  METHOD get_html_body.
+
+    r_result =
+|<div id="mapid" style="width: { i_width_x_in_px }px; height: { i_width_y_in_px }px;"></div>| &&
 `` &&
 `<script>` &&
 `` &&
@@ -57,10 +81,7 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 `mymap.fitBounds(geojsonLayer.getBounds())` &&
 `// L.geoJSON(geojsonFeature).addTo(mymap);` &&
 `` &&
-`</script>` &&
-`` &&
-`</body>   ` &&
-`</html>`.
+`</script>`.
 
     REPLACE '###json###' IN r_result WITH i_json.
   ENDMETHOD.

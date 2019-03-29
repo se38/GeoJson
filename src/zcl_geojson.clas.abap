@@ -55,6 +55,7 @@ CLASS zcl_geojson IMPLEMENTATION.
     r_result = zcl_json_document=>create_with_data(
       data = _featurecollection
       replace_underscore = abap_true
+      replace_double_underscore = abap_true
       )->get_json( ).
   ENDMETHOD.
 

@@ -69,7 +69,10 @@ CLASS app IMPLEMENTATION.
 
     "*--- mark WDF03 with an "X" (with two LineStrings) ---*
     DATA(linestring) = geojson->get_new_linestring( ).
-    linestring->set_properties( i_stroke_width = '5' ).
+    linestring->set_properties(
+        i_weight = '5'
+        i_color = '#ff0000'
+    ).
 
     linestring->add_coordinate(
         i_latitude = CONV #( '49.2926197370113' )
@@ -84,7 +87,10 @@ CLASS app IMPLEMENTATION.
     geojson->add_feature( linestring ).
 
     linestring = geojson->get_new_linestring( ).
-    linestring->set_properties( i_stroke_width = '5' ).
+    linestring->set_properties(
+        i_weight = '5'
+        i_color = '#ff0000'
+    ).
 
     linestring->add_coordinate(
         i_latitude = CONV #( '49.29243080942674' )
@@ -102,8 +108,9 @@ CLASS app IMPLEMENTATION.
     DATA(polygon) = geojson->get_new_polygon( ).
 
     polygon->set_properties(
-        i_fill = '#550000'
-        i_fill_opacity = '0.3'
+        i_weight = 5
+        i_fill_color = '#0000ff'
+        i_fill_opacity = '0.2'
     ).
 
     polygon->add_coordinate(
@@ -148,7 +155,7 @@ CLASS app IMPLEMENTATION.
 
     polygon->finalize( ).
 
-    "*--- add a box arround WDF01 (same polygon) ---*
+    "*--- add a box arround WDF01 (same polygon = same properties) ---*
     polygon->add_coordinate(
         i_latitude = CONV #( '49.29453346265389' )
         i_longitude = CONV #( '8.64200234413147' )
@@ -178,7 +185,7 @@ CLASS app IMPLEMENTATION.
 
     geojson->add_feature( polygon ).
 
-    cl_demo_output=>display_json( geojson->get_json( ) ).
+*    cl_demo_output=>display_json( geojson->get_json( ) ).
 
     "*--- needs SAPGUI, start report with <f8>        ---*
     "*--- does not work with Eclipse console <f9>     ---*
@@ -196,7 +203,12 @@ CLASS app IMPLEMENTATION.
     "*--- does not work with Eclipse console <f9>     ---*
     "*--- does not work in ABAP on SAP Cloud Platform ---*
     "*--- needs Internet connection                   ---*
-*    cl_demo_output=>display_html( NEW zcl_geojson_leafletjs( )->get_html( geojson->get_json( ) ) ).
+    cl_demo_output=>display_html(
+        NEW zcl_geojson_leafletjs( )->get_html(
+            i_json = geojson->get_json( )
+            i_width_x_in_px = 900
+        )
+    ).
 
   ENDMETHOD.
 
