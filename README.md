@@ -1,5 +1,5 @@
 # GeoJSON
-ABAP Classes to create GeoJSON strings according to [RFC 7946](https://tools.ietf.org/html/rfc7946)
+ABAP Classes to create GeoJSON strings according to [RFC 7946](https://tools.ietf.org/html/rfc7946) and display results with [LeafletJS](https://leafletjs.com).
 
 ## Installation
 Import Source with [abapGit](https://github.com/larshp/abapGit)
