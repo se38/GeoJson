@@ -44,7 +44,6 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 ` <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"` &&
 `   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="` &&
 `   crossorigin=""/>` &&
-`` &&
 ` <!-- Make sure you put this AFTER Leaflet's CSS -->` &&
 ` <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"` &&
 `   integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="` &&
@@ -56,11 +55,8 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 
     r_result =
 |<div id="mapid" style="width: { i_width_x_in_px }px; height: { i_width_y_in_px }px;"></div>| &&
-`` &&
 `<script>` &&
-`` &&
 `var mymap = L.map('mapid');` &&
-`` &&
 `L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {` &&
 `    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +` &&
 `      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +` &&
@@ -69,18 +65,17 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 `    id: 'mapbox.streets',` &&
 `    accessToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'` &&
 `}).addTo(mymap);` &&
-`` &&
 `var geojsonFeature = ###json###;` &&
-`` &&
 `var geojsonLayer = L.geoJSON(geojsonFeature, {` &&
 `    style: function (feature) {` &&
 `      return feature.properties && feature.properties.style;` &&
-`    }` &&
+`    },` &&
+`    onEachFeature: function (f, l) { ` &&
+`      if (f.properties.popupContent) { l.bindPopup(f.properties.popupContent) }; ` &&
+`    } ` &&
 `  });` &&
 `geojsonLayer.addTo(mymap);` &&
 `mymap.fitBounds(geojsonLayer.getBounds())` &&
-`// L.geoJSON(geojsonFeature).addTo(mymap);` &&
-`` &&
 `</script>`.
 
     REPLACE '###json###' IN r_result WITH i_json.

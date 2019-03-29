@@ -17,9 +17,10 @@ CLASS zcl_geojson_linestring DEFINITION
                 i_longitude TYPE zcl_geojson=>ty_coordinate_value.
 
     METHODS set_properties
-      IMPORTING i_weight       TYPE i OPTIONAL              "properties for LeafletJS
-                i_color        TYPE string OPTIONAL
-                i_opacity      TYPE ty_opacity OPTIONAL.
+      IMPORTING i_weight        TYPE i OPTIONAL              "properties for LeafletJS
+                i_color         TYPE string OPTIONAL
+                i_opacity       TYPE ty_opacity OPTIONAL
+                i_popup_content TYPE string OPTIONAL.
 
 *      IMPORTING i_stroke         TYPE string OPTIONAL      "properties used by geojson.io
 *                i_stroke_width   TYPE i OPTIONAL
@@ -39,7 +40,8 @@ CLASS zcl_geojson_linestring DEFINITION
            END OF ty_leaflet_style.
 
     DATA: BEGIN OF _leaflet_properties,        "properties used by LeafletJS
-            style TYPE ty_leaflet_style,
+            popup__content TYPE string,
+            style          TYPE ty_leaflet_style,
           END OF _leaflet_properties.
 
 *    DATA: BEGIN OF _geojson_io_properties,     "properties used by geojson.io
@@ -110,6 +112,10 @@ CLASS zcl_geojson_linestring IMPLEMENTATION.
 
     IF i_opacity IS SUPPLIED.
       _leaflet_properties-style-opacity = i_opacity.
+    ENDIF.
+
+    IF i_popup_content IS SUPPLIED.
+      _leaflet_properties-popup__content = i_popup_content.
     ENDIF.
 
 *    IF i_stroke IS SUPPLIED.
