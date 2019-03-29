@@ -48,7 +48,7 @@ CLASS app IMPLEMENTATION.
     ).
 
     point->set_properties(
-*        i_popup_content = 'This is where the cool shit happens'
+        i_popup_content = 'This is where the cool shit happens'
     ).
 
     geojson->add_feature( point ).
@@ -58,7 +58,7 @@ CLASS app IMPLEMENTATION.
     linestring->set_properties(
         i_weight = '5'
         i_color = '#ff0000'
-*        i_popup_content = 'Dig deep here to find the treasure'
+        i_popup_content = 'Dig deep here to find the treasure'
     ).
 
     linestring->add_coordinate(
@@ -98,7 +98,7 @@ CLASS app IMPLEMENTATION.
         i_weight = 5
         i_fill_color = '#0000ff'
         i_fill_opacity = '0.2'
-*        i_popup_content = 'This is ABAP GeoJSON<br />#ABAPsNotDead'
+        i_popup_content = 'This is ABAP GeoJSON<br />#ABAPsNotDead'
     ).
 
     polygon->add_coordinate(
@@ -173,7 +173,7 @@ CLASS app IMPLEMENTATION.
 
     geojson->add_feature( polygon ).
 
-    cl_demo_output=>display_json( geojson->get_json( ) ).
+*    cl_demo_output=>display_json( geojson->get_json( ) ).
 
     "*--- needs SAPGUI, start report with <f8>        ---*
     "*--- does not work with Eclipse console <f9>     ---*
@@ -191,12 +191,12 @@ CLASS app IMPLEMENTATION.
     "*--- does not work with Eclipse console <f9>     ---*
     "*--- does not work in ABAP on SAP Cloud Platform ---*
     "*--- needs Internet connection                   ---*
-*    cl_demo_output=>display_html(
-*        NEW zcl_geojson_leafletjs( )->get_html(
-*            i_json = geojson->get_json( )
-*            i_width_x_in_px = 900
-*        )
-*    ).
+    cl_demo_output=>display_html(
+        NEW zcl_geojson_leafletjs( )->get_html(
+            i_json = geojson->get_json( )
+            i_width_x_in_px = 900
+        )
+    ).
 
   ENDMETHOD.
 
