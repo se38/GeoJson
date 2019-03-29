@@ -48,7 +48,11 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 `` &&
 `var geojsonFeature = ###json###;` &&
 `` &&
-`var geojsonLayer = L.geoJSON(geojsonFeature);` &&
+`var geojsonLayer = L.geoJSON(geojsonFeature, {` &&
+`    style: function (feature) {` &&
+`      return feature.properties && feature.properties.style;` &&
+`    }` &&
+`  });` &&
 `geojsonLayer.addTo(mymap);` &&
 `mymap.fitBounds(geojsonLayer.getBounds())` &&
 `// L.geoJSON(geojsonFeature).addTo(mymap);` &&

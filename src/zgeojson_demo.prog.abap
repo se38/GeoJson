@@ -47,13 +47,19 @@ CLASS app IMPLEMENTATION.
       i_longitude = CONV #( '8.64398717880249' )
     ).
 
+    TYPES: BEGIN OF ty_style,
+             color TYPE string,
+           END OF ty_style.
+
     DATA: BEGIN OF custom_properties,
-            marker_color  TYPE string,
-            marker_symbol TYPE string,
+            marker_color  TYPE string,     "for geojson.io
+            marker_symbol TYPE string,     "for geojson.io
             building      TYPE string,
+            style         TYPE ty_style,   "for leafletjs
           END OF custom_properties.
 
     custom_properties-marker_color = '#FF0000'.
+    custom_properties-style-color = '#FF0000'.
     custom_properties-marker_symbol = 'rocket'.
     custom_properties-building = 'WDF03'.
 
@@ -172,19 +178,25 @@ CLASS app IMPLEMENTATION.
 
     geojson->add_feature( polygon ).
 
-*    cl_demo_output=>display_json( geojson->get_json( ) ).
+    cl_demo_output=>display_json( geojson->get_json( ) ).
 
     "*--- needs SAPGUI, start report with <f8>        ---*
     "*--- does not work with Eclipse console <f9>     ---*
     "*--- does not work in ABAP on SAP Cloud Platform ---*
-    DATA(encoded_json) = cl_http_utility=>escape_url( geojson->get_json( ) ).
+*    DATA(encoded_json) = cl_http_utility=>escape_url( geojson->get_json( ) ).
+*
+*    cl_gui_frontend_services=>execute(
+*      EXPORTING
+*        document               = |http://geojson.io/#data=data:application/json,{ encoded_json }|     " Path+Name to Document
+*      EXCEPTIONS
+*        OTHERS                 = 0
+*    ).
 
-    cl_gui_frontend_services=>execute(
-      EXPORTING
-        document               = |http://geojson.io/#data=data:application/json,{ encoded_json }|     " Path+Name to Document
-      EXCEPTIONS
-        OTHERS                 = 0
-    ).
+    "*--- needs SAPGUI, start report with <f8>        ---*
+    "*--- does not work with Eclipse console <f9>     ---*
+    "*--- does not work in ABAP on SAP Cloud Platform ---*
+    "*--- needs Internet connection                   ---*
+*    cl_demo_output=>display_html( NEW zcl_geojson_leafletjs( )->get_html( geojson->get_json( ) ) ).
 
   ENDMETHOD.
 
