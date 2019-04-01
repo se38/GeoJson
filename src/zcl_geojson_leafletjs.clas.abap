@@ -6,6 +6,7 @@ CLASS zcl_geojson_leafletjs DEFINITION
   PUBLIC SECTION.
     METHODS get_html
       IMPORTING i_json          TYPE string
+                i_access_token  TYPE string DEFAULT 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'   "taken from the examples
                 i_width_x_in_px TYPE i DEFAULT 800
                 i_width_y_in_px TYPE i DEFAULT 500
       RETURNING VALUE(r_result) TYPE string.
@@ -13,8 +14,9 @@ CLASS zcl_geojson_leafletjs DEFINITION
       RETURNING VALUE(r_result) TYPE string.
     METHODS get_html_body
       IMPORTING i_json          TYPE string
-                i_width_x_in_px TYPE i DEFAULT 800
-                i_width_y_in_px TYPE i DEFAULT 500
+                i_access_token  TYPE string
+                i_width_x_in_px TYPE i
+                i_width_y_in_px TYPE i
       RETURNING VALUE(r_result) TYPE string.
   PROTECTED SECTION.
   PRIVATE SECTION.
@@ -32,7 +34,7 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 `</head>` &&
 `` &&
 `<body>` &&
-|{ get_html_body( i_json = i_json i_width_x_in_px = i_width_x_in_px i_width_y_in_px = i_width_y_in_px ) }| &&
+|{ get_html_body( i_json = i_json i_access_token = i_access_token i_width_x_in_px = i_width_x_in_px i_width_y_in_px = i_width_y_in_px ) }| &&
 `</body>   ` &&
 `</html>`.
 
@@ -63,9 +65,9 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 `      '| ABAP <a href="https://github.com/se38/GeoJson">GeoJSON</a> &copy; se38',` &&
 `    maxZoom: 20,` &&
 `    id: 'mapbox.streets',` &&
-`    accessToken: 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'` &&
+|    accessToken: '{ i_access_token }'| &&
 `}).addTo(mymap);` &&
-`var geojsonFeature = ###json###;` &&
+|var geojsonFeature = { i_json };| &&
 `var geojsonLayer = L.geoJSON(geojsonFeature, {` &&
 `    style: function (feature) {` &&
 `      return feature.properties && feature.properties.style;` &&
@@ -78,7 +80,6 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 `mymap.fitBounds(geojsonLayer.getBounds())` &&
 `</script>`.
 
-    REPLACE '###json###' IN r_result WITH i_json.
   ENDMETHOD.
 
 ENDCLASS.
