@@ -54,7 +54,7 @@ CLASS app IMPLEMENTATION.
       i_longitude = CONV #( '6.769356' )
     ).
 
-    point->set_properties( 'One of the nices places of the world' ).
+    point->set_properties( 'One of the nices places in the world' ).
     geojson->add_feature( point ).
 
     cl_demo_output=>display_html(
@@ -71,6 +71,7 @@ CLASS app IMPLEMENTATION.
 
     DATA(mime_api) = cl_mime_repository_api=>get_api( ).
 
+    "Demo GeoJSON downloaded at http://opendatalab.de/projects/geojson-utilities/
     mime_api->get(
       EXPORTING
         i_url = '/SAP/PUBLIC/GeoJSON/duesseldorf.geojson'
