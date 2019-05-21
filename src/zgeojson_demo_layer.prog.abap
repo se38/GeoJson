@@ -54,7 +54,7 @@ CLASS app IMPLEMENTATION.
       i_longitude = CONV #( '6.769356' )
     ).
 
-    point->set_properties( 'One of the nices places in the world' ).
+    point->set_properties( 'One of the nicest places in the world' ).
     geojson->add_feature( point ).
 
     cl_demo_output=>display_html(
