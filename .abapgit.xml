@@ -13,6 +13,7 @@
     <item>/.travis.yml</item>
     <item>/.gitlab-ci.yml</item>
     <item>/abaplint.json</item>
+    <item>/GeoJSON.PNG</item>
    </IGNORE>
   </DATA>
  </asx:values>

@@ -16,11 +16,8 @@ CLASS zcl_geojson_point DEFINITION
                 i_longitude TYPE zcl_geojson=>ty_coordinate_value.
 
     METHODS set_properties
-      IMPORTING i_popup_content TYPE string OPTIONAL.
-
-*      IMPORTING i_marker_color  TYPE string OPTIONAL
-*                i_marker_size   TYPE string OPTIONAL
-*                i_marker_symbol TYPE string OPTIONAL.
+      IMPORTING i_popup_content TYPE string OPTIONAL
+                i_fill_color    TYPE string DEFAULT '#ff7800'.
 
     METHODS set_custom_properties
       IMPORTING i_properties TYPE REF TO data.
@@ -29,13 +26,8 @@ CLASS zcl_geojson_point DEFINITION
 
     DATA: BEGIN OF _leaflet_properties,        "properties used by LeafletJS
             popup__content TYPE string,
+            fill__color    TYPE string,        "only relevant, if you use circle markers
           END OF _leaflet_properties.
-
-*    DATA: BEGIN OF _geojson_io_properties,     "properties used by geojson.io
-*            marker_color  TYPE string,
-*            marker_size   TYPE string,
-*            marker_symbol TYPE string,
-*          END OF _geojson_io_properties.
 
     DATA: BEGIN OF _geometry,
             type        TYPE string,
@@ -57,12 +49,6 @@ CLASS zcl_geojson_point IMPLEMENTATION.
 
   METHOD constructor.
     _point-type = 'Feature'.
-
-*    _geojson_io_properties-marker_color = '#7e7e7e'.
-*    _geojson_io_properties-marker_size = 'medium'.
-*    _geojson_io_properties-marker_symbol = ''.
-*    _point-properties = REF #( _geojson_io_properties ).
-
     _point-properties = REF #( _leaflet_properties ).
     _point-geometry-type = 'Point'.
 
@@ -89,20 +75,12 @@ CLASS zcl_geojson_point IMPLEMENTATION.
 
   METHOD set_properties.
 
-*    IF i_marker_color IS SUPPLIED.
-*      _geojson_io_properties-marker_color = i_marker_color.
-*    ENDIF.
-*
-*    IF i_marker_size IS SUPPLIED.
-*      _geojson_io_properties-marker_size = i_marker_size.
-*    ENDIF.
-*
-*    IF i_marker_symbol IS SUPPLIED.
-*      _geojson_io_properties-marker_symbol = i_marker_symbol.
-*    ENDIF.
-
     IF i_popup_content IS SUPPLIED.
       _leaflet_properties-popup__content = i_popup_content.
+    ENDIF.
+
+    IF i_fill_color IS NOT INITIAL.
+      _leaflet_properties-fill__color = i_fill_color.
     ENDIF.
 
   ENDMETHOD.

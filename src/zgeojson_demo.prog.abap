@@ -49,6 +49,33 @@ CLASS app IMPLEMENTATION.
 
     point->set_properties(
         i_popup_content = 'This is where the cool shit happens'
+        i_fill_color = '#00ff00'
+    ).
+
+    geojson->add_feature( point ).
+
+    "*--- add a marker at WDF03 ---*
+    point = geojson->get_new_point(
+      i_latitude = CONV #( '49.292100' )
+      i_longitude = CONV #( '8.643500' )
+    ).
+
+    point->set_properties(
+        i_popup_content = 'red'
+        i_fill_color = '#ff0000'
+    ).
+
+    geojson->add_feature( point ).
+
+    "*--- add a marker at WDF03 ---*
+    point = geojson->get_new_point(
+      i_latitude = CONV #( '49.292200' )
+      i_longitude = CONV #( '8.643600' )
+    ).
+
+    point->set_properties(
+        i_popup_content = 'green'
+        i_fill_color = '#00ff00'
     ).
 
     geojson->add_feature( point ).
@@ -98,7 +125,7 @@ CLASS app IMPLEMENTATION.
         i_weight = 5
         i_fill_color = '#0000ff'
         i_fill_opacity = '0.2'
-        i_popup_content = 'This is ABAP GeoJSON<br />#ABAPsNotDead'
+        i_popup_content = 'This is ABAP GeoJSON #ABAPsNotDead'
     ).
 
     polygon->add_coordinate(
@@ -173,7 +200,7 @@ CLASS app IMPLEMENTATION.
 
     geojson->add_feature( polygon ).
 
-*    cl_demo_output=>display_json( geojson->get_json( ) ).
+    cl_demo_output=>display_json( geojson->get_json( ) ).
 
     "*--- needs SAPGUI, start report with <f8>        ---*
     "*--- does not work with Eclipse console <f9>     ---*
@@ -191,12 +218,13 @@ CLASS app IMPLEMENTATION.
     "*--- does not work with Eclipse console <f9>     ---*
     "*--- does not work in ABAP on SAP Cloud Platform ---*
     "*--- needs Internet connection                   ---*
-    cl_demo_output=>display_html(
-        NEW zcl_geojson_leafletjs( )->get_html(
-            i_json = geojson->get_json( )
-            i_width_x_in_px = 900
-        )
-    ).
+*    cl_demo_output=>display_html(
+*        NEW zcl_geojson_leafletjs( )->get_html(
+*            i_json = geojson->get_json( )
+*            i_width_x_in_px = 900
+*            i_use_circle_markers = abap_true
+*        )
+*    ).
 
   ENDMETHOD.
 
