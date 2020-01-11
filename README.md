@@ -51,4 +51,4 @@ More examples: see demo report ZGEOJSON_DEMO
 ![Result](GeoJSON.PNG "Result")
 
 ## License
-This software is published under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
+This software is published under [MIT License (https://github.com/se38/GeoJson/blob/master/LICENSE)
