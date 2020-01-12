@@ -4,22 +4,34 @@ CLASS zcl_geojson_leafletjs DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
+    "! Create LeafletJS HTML with GeoJSON source
+    "! @parameter i_json | GeoJSON Source
+    "! @parameter i_additional_layer | use an additional layer
+    "! @parameter i_access_token | own access token
     METHODS get_html
-      IMPORTING i_json             TYPE string
-                i_additional_layer TYPE string OPTIONAL
-                i_access_token     TYPE string DEFAULT 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'   "taken from the examples
-                i_width_x_in_px    TYPE i DEFAULT 800
-                i_width_y_in_px    TYPE i DEFAULT 500
-      RETURNING VALUE(r_result)    TYPE string.
+      IMPORTING i_json               TYPE string
+                i_additional_layer   TYPE string OPTIONAL
+                i_access_token       TYPE string DEFAULT 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'   "taken from the examples
+                i_width_x_in_px      TYPE i DEFAULT 800
+                i_width_y_in_px      TYPE i DEFAULT 500
+                i_use_circle_markers TYPE abap_bool OPTIONAL
+      RETURNING VALUE(r_result)      TYPE string.
+    "! returns the HTML head part
+    "! @parameter r_result | HTML head
     METHODS get_html_head
       RETURNING VALUE(r_result) TYPE string.
+    "! returns the HTML body part
+    "! @parameter i_json | GeoJSON Source
+    "! @parameter i_additional_layer | use an additional layer
+    "! @parameter i_access_token | own access token
     METHODS get_html_body
-      IMPORTING i_json             TYPE string
-                i_additional_layer TYPE string OPTIONAL
-                i_access_token     TYPE string DEFAULT 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'   "taken from the examples
-                i_width_x_in_px    TYPE i OPTIONAL
-                i_width_y_in_px    TYPE i OPTIONAL
-      RETURNING VALUE(r_result)    TYPE string.
+      IMPORTING i_json               TYPE string
+                i_additional_layer   TYPE string OPTIONAL
+                i_access_token       TYPE string DEFAULT 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'   "taken from the examples
+                i_width_x_in_px      TYPE i OPTIONAL
+                i_width_y_in_px      TYPE i OPTIONAL
+                i_use_circle_markers TYPE abap_bool OPTIONAL
+      RETURNING VALUE(r_result)      TYPE string.
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
@@ -36,7 +48,13 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 `</head>` &&
 `` &&
 `<body>` &&
-|{ get_html_body( i_json = i_json i_additional_layer = i_additional_layer i_access_token = i_access_token i_width_x_in_px = i_width_x_in_px i_width_y_in_px = i_width_y_in_px ) }| &&
+|{ get_html_body( i_json = i_json
+                  i_additional_layer = i_additional_layer
+                  i_access_token = i_access_token
+                  i_width_x_in_px = i_width_x_in_px
+                  i_width_y_in_px = i_width_y_in_px
+                  i_use_circle_markers = i_use_circle_markers
+                ) }| &&
 `</body>   ` &&
 `</html>`.
 
@@ -83,12 +101,29 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 `    },` &&
 `    onEachFeature: function (f, l) { ` &&
 `      if (f.properties.popupContent) { l.bindPopup(f.properties.popupContent) }; ` &&
-`    } ` &&
-`  });` &&
-`geojsonLayer.addTo(mymap);` &&
-`mymap.fitBounds(geojsonLayer.getBounds());` &&
-|{ additional_layer }| &&
-`</script>`.
+`    } `.
+
+    IF i_use_circle_markers = abap_true.
+      r_result = r_result &&
+  `    , ` &&
+  `    pointToLayer: function (feature, latlng) { ` &&
+  `      return L.circleMarker(latlng, { ` &&
+  `        radius: feature.properties.radius, ` &&
+  `        fillColor: feature.properties.fillColor, ` &&
+  `        color: feature.properties.color, ` &&
+  `        weight: feature.properties.weight, ` &&
+  `        opacity: feature.properties.opacity, ` &&
+  `        fillOpacity: feature.properties.fillOpacity ` &&
+  `      }); ` &&
+  `    } `.
+    ENDIF.
+
+    r_result = r_result &&
+  `  });` &&
+  `geojsonLayer.addTo(mymap);` &&
+  `mymap.fitBounds(geojsonLayer.getBounds());` &&
+  |{ additional_layer }| &&
+  `</script>`.
 
   ENDMETHOD.
 
