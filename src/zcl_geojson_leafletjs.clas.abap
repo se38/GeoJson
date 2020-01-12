@@ -4,6 +4,10 @@ CLASS zcl_geojson_leafletjs DEFINITION
   CREATE PUBLIC .
 
   PUBLIC SECTION.
+    "! Create LeafletJS HTML with GeoJSON source
+    "! @parameter i_json | GeoJSON Source
+    "! @parameter i_additional_layer | use an additional layer
+    "! @parameter i_access_token | own access token
     METHODS get_html
       IMPORTING i_json               TYPE string
                 i_additional_layer   TYPE string OPTIONAL
@@ -12,8 +16,14 @@ CLASS zcl_geojson_leafletjs DEFINITION
                 i_width_y_in_px      TYPE i DEFAULT 500
                 i_use_circle_markers TYPE abap_bool OPTIONAL
       RETURNING VALUE(r_result)      TYPE string.
+    "! returns the HTML head part
+    "! @parameter r_result | HTML head
     METHODS get_html_head
       RETURNING VALUE(r_result) TYPE string.
+    "! returns the HTML body part
+    "! @parameter i_json | GeoJSON Source
+    "! @parameter i_additional_layer | use an additional layer
+    "! @parameter i_access_token | own access token
     METHODS get_html_body
       IMPORTING i_json               TYPE string
                 i_additional_layer   TYPE string OPTIONAL
