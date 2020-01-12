@@ -221,7 +221,8 @@ CLASS app IMPLEMENTATION.
         NEW zcl_geojson_leafletjs( )->get_html(
             i_json = geojson->get_json( )
             i_width_x_in_px = 900
-            i_use_circle_markers = abap_true
+            i_use_circle_markers = abap_true         "use circle markers
+*            i_use_circle_markers = abap_false       "use regular markers
         )
     ).
 

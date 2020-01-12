@@ -98,12 +98,12 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
   `    , ` &&
   `    pointToLayer: function (feature, latlng) { ` &&
   `      return L.circleMarker(latlng, { ` &&
-  `        radius: 8, ` &&
+  `        radius: feature.properties.radius, ` &&
   `        fillColor: feature.properties.fillColor, ` &&
-  `        color: "#000", ` &&
-  `        weight: 1, ` &&
-  `        opacity: 1, ` &&
-  `        fillOpacity: 0.8 ` &&
+  `        color: feature.properties.color, ` &&
+  `        weight: feature.properties.weight, ` &&
+  `        opacity: feature.properties.opacity, ` &&
+  `        fillOpacity: feature.properties.fillOpacity ` &&
   `      }); ` &&
   `    } `.
     ENDIF.
