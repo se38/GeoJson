@@ -63,12 +63,12 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
   METHOD get_html_head.
 
     r_result =
-` <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"` &&
-`   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="` &&
+` <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"` &&
+`   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="` &&
 `   crossorigin=""/>` &&
 ` <!-- Make sure you put this AFTER Leaflet's CSS -->` &&
-` <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"` &&
-`   integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="` &&
+` <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"` &&
+`   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="` &&
 `   crossorigin=""></script>   `.
 
   ENDMETHOD.
@@ -86,13 +86,14 @@ CLASS zcl_geojson_leafletjs IMPLEMENTATION.
 |<div id="mapid" style="width: { i_width_x_in_px }px; height: { i_width_y_in_px }px;"></div>| &&
 `<script>` &&
 `var mymap = L.map('mapid');` &&
-`L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {` &&
-`    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +` &&
-`      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +` &&
-`      '| ABAP <a href="https://github.com/se38/GeoJson">GeoJSON</a> &copy; se38',` &&
-`    maxZoom: 20,` &&
-`    id: 'mapbox.streets',` &&
-|    accessToken: '{ i_access_token }'| &&
+`L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {` &&
+`      attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>` &&
+`      | ABAP <a href="https://github.com/se38/GeoJson">GeoJSON</a> &copy; se38',` &&
+`      tileSize: 512,` &&
+`      maxZoom: 18,` &&
+`      zoomOffset: -1,` &&
+`      id: 'mapbox/streets-v11',` &&
+|      accessToken: '{ i_access_token }'| &&
 `}).addTo(mymap);` &&
 |var geojsonFeature = { i_json };| &&
 `var geojsonLayer = L.geoJSON(geojsonFeature, {` &&
