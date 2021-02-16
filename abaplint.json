@@ -13,6 +13,11 @@
       "url": "https://github.com/abaplint/deps",
       "folder": "/deps",
       "files": "/src/**/*.*"
+    },
+    {
+      "url": "https://github.com/se38/zjson",
+      "folder": "/",
+      "files": "/src/**/*.*"
     }
   ],
   "syntax": {
@@ -22,7 +27,7 @@
     "globalMacros": []
   },
   "rules": {
-    "7bit_ascii": true,
+    "7bit_ascii": false,
     "abapdoc": false,
     "allowed_object_naming": true,
     "allowed_object_types": true,
