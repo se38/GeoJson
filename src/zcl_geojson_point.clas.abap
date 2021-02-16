@@ -15,6 +15,9 @@ CLASS zcl_geojson_point DEFINITION
       IMPORTING i_latitude  TYPE zcl_geojson=>ty_coordinate_value
                 i_longitude TYPE zcl_geojson=>ty_coordinate_value.
 
+    METHODS set_geometry_from_json
+      IMPORTING i_json TYPE string.
+
     METHODS set_properties
       IMPORTING i_popup_content TYPE string OPTIONAL
                 i_radius        TYPE i DEFAULT 8
@@ -107,6 +110,17 @@ CLASS zcl_geojson_point IMPLEMENTATION.
 
   METHOD set_custom_properties.
     _point-properties = i_properties.
+  ENDMETHOD.
+
+  METHOD set_geometry_from_json.
+
+    /ui2/cl_json=>deserialize(
+      EXPORTING
+        json             = i_json
+      CHANGING
+        data             = _point-geometry
+    ).
+
   ENDMETHOD.
 
 ENDCLASS.
